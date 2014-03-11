@@ -16,7 +16,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <link rel="stylesheet" href="css/reveal.min.css">
+    <link rel="stylesheet" href="css/reveal.css">
     <link rel="stylesheet" href="css/theme/default.css" id="theme">
 
     <!-- For syntax highlighting -->
@@ -40,26 +40,38 @@
         max-height: none;
       }
 
-      section.tweet {
-        text-align: center;
-      }
-
-      section.tweet iframe {
-        margin: 10px auto !important;
+      section.capitalization {
+        height: 100%;
       }
 
       .links {
         text-align: left;
         padding-left: 150px !important;
       }
+
+      .capitalization iframe {
+        width: 100%;
+        height: 90%;
+        margin: 50px 0 0 0;
+      }
+
+      section table {
+        width: 100%;
+      }
+
+      section table.triptych td {
+        vertical-align: text-top;
+      }
     </style>
+
+    <script src="lib/js/head.min.js"></script>
   </head>
 
   <body>
     <div class="reveal">
       <div class="slides">
         <section>
-          <h1>Technical and Social Progress Toward ECMAScript 6 at Facebook</h1>
+          <h2>technical and social progress toward ECMAScript 6 at facebook</h2>
           <p>
             <small>
               Ben Newman (Facebook)<br>
@@ -68,6 +80,1072 @@
           </p>
         </section>
 
+        <section class="capitalization">
+          <h2>Wikipedia</h2>
+          <!-- TODO: Jump to #Headings_and_publication_titles -->
+          <iframe src="http://en.wikipedia.org/wiki/Letter_case"></iframe>
+        </section>
+
+        <section class="capitalization">
+          <h2>titlecapitalization.com</h2>
+          <iframe src="http://titlecapitalization.com/"></iframe>
+        </section>
+
+        <section>
+          <h2>
+            We have the opportunity<span class="fragment">, as
+            technologists,</span> <span class="fragment">to make certain
+            kinds of problems disappear forever.</span>
+          </h2>
+        </section>
+
+        <section>
+          <h2>
+            &ldquo;We should have been doing it this way all along!&rdquo;
+          </h2>
+          <br>
+          <p class="fragment">
+            Congratulations! <span class="fragment">You're not done.</span>
+          </p>
+          <p class="fragment">
+            Not even if you're right.
+          </p>
+          <p class="fragment">
+            Not even if <i>everyone agrees</i> that you're right.
+          </p>
+        </section>
+
+        <section>
+          <h2>
+            GitHub is littered with better ways of doing things that never
+            got properly evangelized.
+          </h2>
+          <aside class="notes">
+            <p>
+              Code just left there without warranty of any kind, either
+              expressed or implied, in the vague hope that other people
+              face needs that are similar to the ones that motivated the
+              author.
+            </p>
+            <p>
+              Often &ldquo;better&rdquo; just means &ldquo;better tailored
+              to my particular use case.&rdquo;
+            </p>
+            <p>
+              In which case there's no mystery why the evangelical message
+              went nowhere.
+            </p>
+          </aside>
+        </section>
+
+        <section>
+          <h2>
+            There has to be a way forward.
+          </h2>
+          <aside class="notes">
+            <p>
+              And it can't involve throwing away all of your code and
+              starting over from scratch, as tempting as that might be.
+            </p>
+            <p>
+              As the evangelist, you have a responsibility to yourself, to
+              your ideas, and to the people you want to help, to devise
+              and execute an incremental migration plan.
+            </p>
+            <p>
+              Other people won't be willing to buy in unless you justify
+              the effort and short-term increase in complexity.
+            <p>
+          </p>
+        </section>
+
+        <section>
+          <h2>
+            Programming languages are notoriously difficult to &ldquo;fix
+            forward.&rdquo;
+          </h2>
+          <br>
+          <p class="fragment">
+            Why isn't every Python project using Python 3 yet?
+          </p>
+          <aside class="notes">
+            <p>It has that <code>2to3</code> script.</p>
+            <p>The maintainers have realistic expectations.</p>
+            <p>Biggest barrier: changes in unicode semantics.</p>
+            <p>
+              Attempting to solve a problem once and for all typically
+              requires adapting many different, somewhat-functional past
+              solutions.
+            </p>
+          </aside>
+        </section>
+
+        <section>
+          <h2>
+            How can ECMAScript 6<br>
+            <span class="fragment">avoid the Python 3 problem?</span>
+          </h2>
+          <br>
+          <p>
+            <span class="fragment"><b>Crazy idea:</b></span>
+            <span class="fragment"><em>ease</em> into the new
+            language</span> <span class="fragment">by <em>simulating</em>
+            its most useful features</span> <span class="fragment">in
+            the <em>current</em> version of JavaScript (ECMAScript
+            5).</span>
+          </p>
+          <aside class="notes">
+            <p>
+              The great virtue of this idea is that it makes sense at
+              every stage.
+            </p>
+            <p>
+              Even if it never ultimately connects with the next version
+              of the language, or takes a long time getting there, we
+              still benefit.
+            </p>
+          </aside>
+        </section>
+
+        <section>
+          TODO Embed some Instagram picture.
+        </section>
+
+        <section>
+          <h2>Example: <code>=></code> function syntax</h2>
+          <br>
+          <pre class="fragment javascript big center"><code>
+[3, 1, 10, 28].sort((a, b) => a - b)
+          </code></pre>
+        </section>
+
+        <section>
+          <h3>First, import some utilities and parse the code:</h3>
+          <br>
+          <pre class="fragment javascript big"><code>
+var recast = require("recast");
+var types = recast.types;
+var traverse = types.traverse;
+var n = types.namedTypes;
+var b = types.builders;</code></pre>
+          <pre class="fragment javascript big"><code>
+var ast = recast.parse(
+  "[3, 1, 10, 28].sort((a, b) => a - b)"
+);</code></pre>
+        </section>
+
+        <section>
+          <section data-transition="none">
+            <h3>Next, traverse and modify the syntax tree:</h3>
+            <br>
+            <pre class="javascript small"><code>
+traverse(ast, function(node) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+});
+            </code></pre>
+          </section>
+
+          <section data-transition="none">
+            <h3>Next, traverse and modify the syntax tree:</h3>
+            <br>
+            <pre class="javascript small"><code>
+traverse(ast, function(node) {
+  if (n.ArrowFunctionExpression.check(node)) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  }
+});
+            </code></pre>
+          </section>
+          <section data-transition="none">
+            <h3>Next, traverse and modify the syntax tree:</h3>
+            <br>
+            <pre class="javascript small"><code>
+traverse(ast, function(node) {
+  if (n.ArrowFunctionExpression.check(node)) {
+    var body = node.body;
+
+    if (node.expression) {
+      node.expression = false;
+      body = b.blockStatement([b.returnStatement(body)]);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+  }
+});
+            </code></pre>
+          </section>
+
+          <section data-transition="none">
+            <h3>Next, traverse and modify the syntax tree:</h3>
+            <br>
+            <pre class="javascript small"><code>
+traverse(ast, function(node) {
+  if (n.ArrowFunctionExpression.check(node)) {
+    var body = node.body;
+
+    if (node.expression) {
+      node.expression = false;
+      body = b.blockStatement([b.returnStatement(body)]);
+    }
+
+    var funExp = b.functionExpression(
+      node.id, node.params, body,
+      node.generator, node.expression
+    );
+
+
+
+
+
+
+
+  }
+});
+            </code></pre>
+          </section>
+
+          <section data-transition="none">
+            <h3>Next, traverse and modify the syntax tree:</h3>
+            <br>
+            <pre class="javascript small"><code>
+traverse(ast, function(node) {
+  if (n.ArrowFunctionExpression.check(node)) {
+    var body = node.body;
+
+    if (node.expression) {
+      node.expression = false;
+      body = b.blockStatement([b.returnStatement(body)]);
+    }
+
+    var funExp = b.functionExpression(
+      node.id, node.params, body,
+      node.generator, node.expression
+    );
+
+    var bindExp = b.callExpression(
+      b.memberExpression(funExp, b.identifier("bind"), false),
+      [b.thisExpression()]
+    );
+
+
+  }
+});
+            </code></pre>
+          </section>
+
+          <section data-transition="none">
+            <h3>Next, traverse and modify the syntax tree:</h3>
+            <br>
+            <pre class="javascript small"><code>
+traverse(ast, function(node) {
+  if (n.ArrowFunctionExpression.check(node)) {
+    var body = node.body;
+
+    if (node.expression) {
+      node.expression = false;
+      body = b.blockStatement([b.returnStatement(body)]);
+    }
+
+    var funExp = b.functionExpression(
+      node.id, node.params, body,
+      node.generator, node.expression
+    );
+
+    var bindExp = b.callExpression(
+      b.memberExpression(funExp, b.identifier("bind"), false),
+      [b.thisExpression()]
+    );
+
+    this.replace(bindExp);
+  }
+});
+            </code></pre>
+          </section>
+        </section>
+
+        <section>
+          <h3>Finally, reprint the code:</h3>
+          <br>
+          <pre class="javascript big fragment"><code>
+console.log(recast.print(ast).code);
+
+// Which prints:
+[3, 1, 10, 28].sort(function(a, b) {
+  return a - b;
+}.bind(this))
+          </code></pre>
+          <br>
+          <p class="fragment">
+            If you already have a build step for static
+            resources, <span class="fragment">you can be cooking with
+            arrow functions in a matter of minutes!</span>
+          </p>
+        </section>
+
+        <section>
+          TODO Include a live-editing demo.
+        </section>
+
+        <section>
+          <h2><a href="https://github.com/benjamn/recast">recast</a>, <em>v</em>.</h2>
+          <br>
+          <ol>
+            <li class="fragment">
+              to give (a metal object) a different form by melting it down
+              and reshaping it.
+            </li>
+            <li class="fragment">
+              to form, fashion, or arrange again.
+            </li>
+            <li class="fragment">
+              to remodel or reconstruct (a literary work, document,
+              sentence, etc.).
+            </li>
+            <li class="fragment">
+              to supply (a theater or opera work) with a new cast.
+            </li>
+          </ol>
+        </section>
+
+        <section>
+          <h2>The routine:</h2>
+          <br>
+          <pre class="fragment javascript big"><code>
+var recast = require("recast");
+var ast = recast.parse(source);
+transform(ast); // Anything goes.
+console.log(recast.print(ast).code);
+          </code></pre>
+        </section>
+
+        <section>
+          <p>
+            Instead of simply pretty-printing the whole
+            tree, <code>recast.print</code> tries to recyle the original
+            source code wherever possible.
+          </p>
+          <br>
+          <br>
+          <p class="fragment">
+            "Non-destructive partial source transformation"<br>
+            &ndash; Ariya Hidayat
+          </p>
+        </section>
+
+        <section>
+          <p>
+            You get to think about Syntax in the abstract,<br>
+            pristine desert of your imagination.
+          </p>
+          <br>
+          <br>
+          <p class="fragment">
+            And what you get in return are diffs that<br>
+            <em>humans</em> can read and review.
+          </p>
+        </section>
+
+        <section>
+          <section data-transition="none">
+            <h2>Example: <code>...rest</code> parameters</h2>
+            <br>
+            <pre class="javascript small"><code>
+traverse(ast, function(node) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+});</code></pre>
+          </section>
+
+          <section data-transition="none">
+            <h2>Example: <code>...rest</code> parameters</h2>
+            <br>
+            <pre class="javascript small"><code>
+traverse(ast, function(node) {
+  if (n.Function.check(node) && node.rest) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  }
+});</code></pre>
+          </section>
+
+          <section data-transition="none">
+            <h2>Example: <code>...rest</code> parameters</h2>
+            <br>
+            <pre class="javascript small"><code>
+traverse(ast, function(node) {
+  if (n.Function.check(node) && node.rest) {
+    var sliceCallee = mx(mx(mx("Array", "prototype"), "slice"), "call");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  }
+});</code></pre>
+          </section>
+
+          <section data-transition="none">
+            <h2>Example: <code>...rest</code> parameters</h2>
+            <br>
+            <pre class="javascript small"><code>
+traverse(ast, function(node) {
+  if (n.Function.check(node) && node.rest) {
+    var sliceCallee = mx(mx(mx("Array", "prototype"), "slice"), "call");
+
+    var sliceArgs = [
+      b.identifier("arguments"),
+      b.literal(node.params.length
+    )];
+
+
+
+
+
+
+
+
+
+  }
+});</code></pre>
+          </section>
+
+          <section data-transition="none">
+            <h2>Example: <code>...rest</code> parameters</h2>
+            <br>
+            <pre class="javascript small"><code>
+traverse(ast, function(node) {
+  if (n.Function.check(node) && node.rest) {
+    var sliceCallee = mx(mx(mx("Array", "prototype"), "slice"), "call");
+
+    var sliceArgs = [
+      b.identifier("arguments"),
+      b.literal(node.params.length
+    )];
+
+    var sliceCall = b.callExpression(sliceCallee, sliceArgs);
+
+
+
+
+
+
+
+  }
+});</code></pre>
+          </section>
+
+          <section data-transition="none">
+            <h2>Example: <code>...rest</code> parameters</h2>
+            <br>
+            <pre class="javascript small"><code>
+traverse(ast, function(node) {
+  if (n.Function.check(node) && node.rest) {
+    var sliceCallee = mx(mx(mx("Array", "prototype"), "slice"), "call");
+
+    var sliceArgs = [
+      b.identifier("arguments"),
+      b.literal(node.params.length
+    )];
+
+    var sliceCall = b.callExpression(sliceCallee, sliceArgs);
+
+    var restVarDecl = b.variableDeclaration("var", [
+      b.variableDeclarator(node.rest, sliceCall)
+    ]);
+
+
+
+  }
+});</code></pre>
+          </section>
+
+          <section data-transition="none">
+            <h2>Example: <code>...rest</code> parameters</h2>
+            <br>
+            <pre class="javascript small"><code>
+traverse(ast, function(node) {
+  if (n.Function.check(node) && node.rest) {
+    var sliceCallee = mx(mx(mx("Array", "prototype"), "slice"), "call");
+
+    var sliceArgs = [
+      b.identifier("arguments"),
+      b.literal(node.params.length
+    )];
+
+    var sliceCall = b.callExpression(sliceCallee, sliceArgs);
+
+    var restVarDecl = b.variableDeclaration("var", [
+      b.variableDeclarator(node.rest, sliceCall)
+    ]);
+
+    node.body.body.unshift(restVarDecl);
+
+  }
+});</code></pre>
+          </section>
+
+          <section data-transition="none">
+            <h2>Example: <code>...rest</code> parameters</h2>
+            <br>
+            <pre class="javascript small"><code>
+traverse(ast, function(node) {
+  if (n.Function.check(node) && node.rest) {
+    var sliceCallee = mx(mx(mx("Array", "prototype"), "slice"), "call");
+
+    var sliceArgs = [
+      b.identifier("arguments"),
+      b.literal(node.params.length
+    )];
+
+    var sliceCall = b.callExpression(sliceCallee, sliceArgs);
+
+    var restVarDecl = b.variableDeclaration("var", [
+      b.variableDeclarator(node.rest, sliceCall)
+    ]);
+
+    node.body.body.unshift(restVarDecl);
+    node.rest = null;
+  }
+});</code></pre>
+          </section>
+        </section>
+
+        <section>
+          <h2>Example: <code>class</code> syntax</h2>
+          <!-- TODO Make sure ES6 is properly highlighted -->
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <pre class="javascript small fragment"><code>
+class Derived extends Base {
+  constructor(value) {
+    super(value + 1);
+  }
+
+  getValue() {
+    return super.getValue() - 1;
+  }
+
+  static getName() {
+    return "Derived";
+  }
+}</pre></code>
+                </td>
+                <td>
+                  <pre class="javascript small fragment"><code>
+function Derived(value) {
+  Base.call(this, value + 1);
+}
+
+Derived.prototype = Object.create(Base.prototype);
+
+Derived.prototype.constructor = Derived;
+
+Derived.prototype.getValue = function() {
+  return Base.prototype.getValue.call(this) - 1;
+};
+
+Derived.getName = function() {
+  return "Derived";
+};</pre></code>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="fragment">
+            Transform code much more involved than previous examples;<br>
+            see <a target="_blank" href="https://github.com/facebook/jstransform/blob/master/visitors/es6-class-visitors.js">es6-class-visitors.js</a>
+            for all the gory details.
+          </p>
+        </section>
+
+        <section>
+          <h2>What our classes used to look like:</h2>
+          <br>
+          <pre class="javascript small fragment"><code>
+var Class = require('Class');
+var copyProperties = require('copyProperties');
+
+function Derived(value) {
+  this.parent(value + 1);
+}
+
+copyProperties(Derived.prototype, {
+  getValue: function() {
+    return this.parent.getValue() - 1;
+  }
+});
+
+copyProperties(Derived, {
+  getName: function() {
+    return "Derived";
+  }
+});
+
+Class.extend(Derived, Base);</pre></code>
+        </section>
+
+        <section>
+          <h2>Original plan</h2>
+          <br>
+          <ol>
+            <li class="fragment">
+              Add a <code>jslint</code> warning that complains when you
+              try to commit new code that assigns
+              <code>.prototype</code> properties
+            </li>
+            <li class="fragment">
+              Point to a wiki article in the warning message
+            </li>
+            <li class="fragment">
+              Post about the new syntax in some internal Facebook groups
+            </li>
+            <li class="fragment">
+              Wait for the diffs to roll in
+            </li>
+            <li class="fragment">
+              Declare victory<span class="fragment"> (just in time for
+              ECMAScript 12)</span>
+            </li>
+          </p>
+        </section>
+
+        <section>
+          <h2>Wishful thinking!</h2>
+          <br>
+          <ul>
+            <li class="fragment">
+              <code>jslint</code> tells you that your code <em>might</em>
+              be bad <em>after</em> you've written it
+            </li>
+            <li class="fragment">
+              No one reads wiki articles unless hopelessly stuck
+            </li>
+            <li class="fragment">
+              I'm not about to make reeducating thousands of Facebook
+              engineers my full-time job
+            </li>
+            <li class="fragment">
+              As long as the old style of defining classes dominates the
+              codebase, that's the style engineers will (reasonably!)
+              mimic
+            </li>
+          </ul>
+        </section>
+
+        <section data-transition="none">
+          <h2>What to do?</h2>
+          <br>
+          <table class="triptych">
+            <tbody>
+              <tr>
+                <td>We have lots of this (ES5):</td>
+                <td>We want more of this (ES6):</td>
+              </tr>
+              <tr>
+                <td>
+                  <pre class="javascript small fragment"><code>
+var Class = require('Class');
+var copyProperties = require('copyProperties');
+
+function Derived(value) {
+  this.parent(value + 1);
+}
+
+copyProperties(Derived.prototype, {
+  getValue: function() {
+    return this.parent.getValue() - 1;
+  }
+});
+
+copyProperties(Derived, {
+  getName: function() {
+    return "Derived";
+  }
+});
+
+Class.extend(Derived, Base);</pre></code>
+                </td>
+                <td>
+                  <pre class="javascript small fragment"><code>
+class Derived extends Base {
+  constructor(value) {
+    super(value + 1);
+  }
+
+  getValue() {
+    return super.getValue() - 1;
+  }
+
+  static getName() {
+    return "Derived";
+  }
+}</pre></code>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- TODO: Do a better transition to this slide -->
+        <section data-transition="none">
+          <h2>What to do?</h2>
+          <br>
+          <table class="triptych">
+            <tbody>
+              <tr>
+                <td>We want more of this (ES6):</td>
+                <td>So that we can ship this (ES5):</td>
+              </tr>
+              <tr>
+                <td>
+                  <pre class="javascript small"><code>
+class Derived extends Base {
+  constructor(value) {
+    super(value + 1);
+  }
+
+  getValue() {
+    return super.getValue() - 1;
+  }
+
+  static getName() {
+    return "Derived";
+  }
+}</pre></code>
+                </td>
+                <td>
+                  <pre class="javascript small fragment"><code>
+function Derived(value) {
+  Base.call(this, value + 1);
+}
+
+Derived.prototype = Object.create(Base.prototype);
+
+Derived.prototype.constructor = Derived;
+
+Derived.prototype.getValue = function() {
+  return Base.prototype.getValue.call(this) - 1;
+};
+
+Derived.getName = function() {
+  return "Derived";
+};</pre></code>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section>
+          <h2>We've solved this problem before</h2>
+          <br>
+          <p class="fragment">
+            It's just a source
+            tranformation! <span class="fragment">What's different?</span>
+          </p>
+          <br>
+          <ol>
+            <li class="fragment">
+              ES5 to ES6 (the "wrong" direction)
+            </li>
+            <li class="fragment">
+              Only needs to be performed once!
+            </li>
+            <li class="fragment">
+              Needs to accommodate multiple existing idioms
+            </li>
+            <li class="fragment">
+              Needs to generate pretty code, as if (re)written by hand
+            </li>
+            <li class="fragment">
+              The diffs need to be human-reviewable
+            </li>
+          </ol>
+          <br>
+          <br>
+          <h3 class="fragment">
+            &ldquo;Non-destructive partial source transformation&rdquo;
+          </h3>
+        </section>
+
+        <section>
+          TODO Instagram photo
+          <aside class="notes">
+            Personal anecdote about moving to NYC, trying to find a new
+            team, and needing to appear productive while I did so.
+          </aside>
+        </section>
+
+        <section>
+          <h2>So far:</h2>
+          <br>
+          <div class="fragment">1647 files changed</div>
+          <div class="fragment">76555 insertions(+)</div>
+          <div class="fragment">78260 deletions(-)</div>
+        </section>
+
+        <section>
+          TODO Example diff
+        </section>
+
+        <section>
+          <h1>Lessons</h1>
+        </section>
+
+        <section>
+          <h2><ol start="1"><li>
+            If you make the output human-readable enough, reviewers
+            often won't even realize you didn't write it.
+          </li></ol></h2>
+        </section>
+
+        <section>
+          <h2><ol start="2"><li>
+            The transform code should be absolutely <em>littered</em> with
+            fail-stop assertions.
+          </li></ol></h2>
+        </section>
+
+        <section>
+          <h2><ol start="3"><li>
+            Set yourself up to iterate rapidly, accommodating more and
+            more exotic cases as you encounter them.
+          </li></ol></h2>
+        </section>
+
+        <section>
+          <h2><ol start="4"><li>
+            Don't hesitate to massage rare cases by hand, but do it in a
+            separate commit so that you can keep running the script on top
+            of those changes.
+          </li></ol></h2>
+        </section>
+
+        <section>
+          <h2><ol start="5"><li>
+            Make the script <b>idempotent</b>! No excuses!
+            You <em>will</em> end up re-running the script on
+            already-transformed files, as your script improves, no matter
+            how confident you are.
+          </li></ol></h2>
+          <aside class="notes">
+            Think about files with multiple classes, some of which you
+            knew how to transform before you knew how to handle the
+            others.
+          </aside>
+        </section>
+
+        <section>
+          <h2><ol start="6"><li>
+            If possible, your script should operate on one file at a time, so that
+            tools like GNU <code>parallel</code> can run many copies of it
+            simultaneously.
+          </li></ol></h2>
+          <aside class="notes">
+            TODO Add an example of such a command.
+          </aside>
+        </section>
+
+        <section>
+          <h2><ol start="7"><li>
+            Humans have right-of-way.
+          </li></ol></h2>
+          <aside class="notes">
+            <p>
+              You can always &ldquo;rebase&rdquo; by re-running your
+              script&mdash;an incredible luxury, if you think about it.
+            </p>
+            <p>
+              This happens so frequently that I'm tempted to say it the
+              conversion wouldn't be possible without this property.
+            </p>
+          </aside>
+        </section>
+
+        <section>
+          <h2><ol start="8"><li>
+            Identify stakeholders, and convert whole functional units of
+            code at once.
+          </li></ol></h2>
+          <aside class="notes">
+            <p>
+              Even if you think you can get away with the transform
+              without any objections, you can't avoid the complaint that
+              the code wasn't broken before.
+            </p>
+            <p>
+              I didn't do this at first and it bit me.
+            </p>
+            <p>
+              A big long-term benefit was that I had more and more
+              successful examples to point to over time. Social proof!
+            </p>
+            <p>
+              This might be the biggest lesson of all.
+            </p>
+          </aside>
+        </section>
+
+        <section>
+          <h2><ol start="9"><li>
+            Identify milestones, and push towards them aggressively.
+          </li></ol></h2>
+          <ol type="i">
+            <li class="fragment">Convert a few high-profile internal projects</li>
+            <li class="fragment">Convert all internal projects</li>
+            <li class="fragment">Convert all proper CommonJS modules</li>
+            <li class="fragment">
+              Convert non-modules that use <code>Class.extend</code> to
+              modules so we can kill Class.js and start
+              using <code>extends</code>/<code>super</code> sooner
+            </li>
+            <li class="fragment">
+              Convert relatively modern products like /messages
+            </li>
+            <li class="fragment">
+              Some day&mdash;maybe!&mdash;finish modularizing
+              everything, but no hurry
+            </li>
+          </ol>
+          <aside class="notes">
+          </aside>
+        </section>
+
+        <section>
+          <h2><ol start="10"><li>
+            Never forget the end goal: <span class="fragment">when new
+            code is written, it will more likely than not mimic the modern
+            ES6 style than the old idioms.
+          </li></ol></h2>
+        </section>
+
+
+
+        <section>
+          TODO Talk about codemod.py
+        </section>
+
+        <section>
+          TODO talk about polyfills
+        </section>
+
+        <section>
+          <!-- TODO Figure out where to put this -->
+          <pre class="javascript"><code>
+function guessTabWidth(code) {
+    var counts = []; // Sparse array.
+    var lastIndent = 0;
+
+    code.split("\n").forEach(function(line) {
+        if (/\S/.test(line)) { // Ignore blank lines.
+            var diff = Math.abs(info.indent - lastIndent);
+            counts[diff] = ~~counts[diff] + 1;
+            lastIndent = info.indent;
+        }
+    });
+
+    var maxCount = -1;
+    var result = 2; // Fallback guess for flat files.
+
+    // Note that forEach skips holes in sparse arrays.
+    counts.forEach(function(count, i) {
+        if (i > 0 && count > maxCount) {
+            maxCount = count;
+            result = i;
+        }
+    });
+
+    return result;
+}</code></pre>
+        </section>
+
+
+
         <section>
           <h2>Thanks!</h2>
         </section>
@@ -75,13 +1153,13 @@
         <section class="links">
           External links:
           <pre class="contact">github.com/{
+  <a href="https://github.com/benjamn/ast-types">benjamn/ast-types</a>,
   <a href="https://github.com/benjamn/recast">benjamn/recast</a>,
   <a href="https://github.com/facebook/regenerator">facebook/regenerator</a>,
-  <a href="https://github.com/amiorin/regeneratorify">amiorin/regeneratorify</a>,
-  <a href="https://github.com/olov/defs">olov/defs</a>,
-  <a href="https://github.com/TooTallNate/gnode">TooTallNate/gnode</a> }</pre>
+  <a href="https://github.com/facebook/jstransform">facebook/jstransform</a> }</pre>
           <br>
-          Talk to me:
+          Talk to me: <!-- TODO: Move this to the beginning of the --
+                        -- presentation -->
           <pre class="contact">
 { <a href="http://github.com/benjamn">github</a>,
   <a href="http://twitter.com/benjamn">twitter</a>,
@@ -92,8 +1170,7 @@
 
       </div>
 
-      <script src="lib/js/head.min.js"></script>
-      <script src="js/reveal.min.js"></script>
+      <script src="js/reveal.js"></script>
       <script src="init.js"></script>
       <script src="//platform.twitter.com/widgets.js"
               async charset="utf-8"></script>

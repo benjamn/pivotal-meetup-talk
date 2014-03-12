@@ -1,7 +1,7 @@
 // Full list of configuration options available here:
 // https://github.com/hakimel/reveal.js#configuration
 Reveal.initialize({
-    width: 1280,
+    width: 1080,
     height: 720,
 
     controls: true,
@@ -56,3 +56,5 @@ Reveal.initialize({
         }
     }]
 });
+
+makeCodeMirror.init();

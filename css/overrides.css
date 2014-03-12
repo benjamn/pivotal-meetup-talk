@@ -1,0 +1,87 @@
+.branding {
+  position: fixed;
+  left: 25px;
+  bottom: 25px;
+}
+
+.reveal pre {
+  box-shadow: none;
+  display: inline-block;
+  margin: 0 auto;
+  width: auto;
+}
+
+.reveal pre.big,
+.reveal pre.contact {
+  font-size: 32px;
+}
+
+.reveal pre.center {
+  text-align: center;
+}
+
+.reveal pre code {
+  max-height: none;
+}
+
+section.full_height,
+section.external_iframe {
+  height: 100%;
+}
+
+.links {
+  text-align: left;
+  padding-left: 150px !important;
+}
+
+.external_iframe iframe {
+  width: 100%;
+  height: 90%;
+  margin: 50px 0 0 0;
+}
+
+section table {
+  width: 100%;
+}
+
+section table.top td {
+  vertical-align: text-top;
+}
+
+img.instagram {
+  zoom: 1 !important;
+}
+
+.reveal section .thanks {
+  position: relative;
+  top: -30px;
+}
+
+.reveal section .thanks h2 {
+  color: white;
+  position: absolute;
+  left: 200px;
+  top: 350px;
+}
+
+.reveal section .thanks img {
+  z-index: -1;
+}
+
+.reveal section .CodeMirror {
+  height: auto;
+  display: inline-block;
+  margin: 20px auto;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+  font-family: monospace;
+}
+
+.reveal section .CodeMirror pre {
+  display: block;
+}
+
+.reveal section .CodeMirror-scroll {
+  padding-right: 1em;
+}

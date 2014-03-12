@@ -25,11 +25,6 @@
     <link rel="stylesheet" type="text/css" href="css/overrides.css">
 
     <script src="lib/js/head.min.js"></script>
-
-    <script src="codemirror/lib/codemirror.js"></script>
-    <link rel="stylesheet" href="codemirror/lib/codemirror.css" />
-    <script src="codemirror/mode/javascript.js"></script>
-    <script src="editor.js"></script>
     <script src="node_modules/transforms/bundle.js"></script>
   </head>
 
@@ -196,20 +191,26 @@
         <section>
           <h2>Example: <code>=></code> function syntax</h2>
           <br>
-          <div class="fragment">
+          <div>
             <b>Input (ES6):</b>
-            <div id="arrow-fn-input"></div>
+            <br>
+            <pre id="arrow-fn-input"
+                 class="fragment javascript big"><code>
+[3, 1, 10, 28].sort((a, b) => a - b)</code></pre>
+            <br>
             <br>
             <b>Output (ES5):</b>
-            <div id="arrow-fn-output"></div>
-            <script>
-              makeCodeMirror(
-                "[3, 1, 10, 28].sort((a, b) => a - b)",
-                transforms.transformArrowFunctions,
-                "arrow-fn-input",
-                "arrow-fn-output"
-              );
-            </script>
+            <br>
+            <pre id="arrow-fn-output"
+                 class="fragment javascript big"><code>
+[3, 1, 10, 28].sort(function(a, b) {
+  return a - b;
+}.bind(this))</code></pre>
+            <!--<script>
+              document.getElementById("arrow-fn-output").innerText =
+                transforms.transformArrowFunctions(
+                  document.getElementById("arrow-fn-input").innerText);
+            </script>-->
           </div>
         </section>
 
@@ -478,25 +479,29 @@ console.log(recast.print(ast).code);
           <section data-transition="none">
             <h2>Example: <code>...rest</code> parameters</h2>
             <br>
-            <div class="fragment">
-              <b>Input (ES6):</b>
-              <div id="rest-param-input"></div>
-              <b>Output (ES5):</b>
-              <div id="rest-param-output"></div>
-              <script>
-                // TODO Switch to ACE.
-                makeCodeMirror([
-                  "function max(a, ...rest) {",
-                  "  rest.forEach(x => { if (x > a) a = x; });",
-                  "  return a;",
-                  "}"
-                ].join("\n"),
-                  transforms.transformRestParameters,
-                  "rest-param-input",
-                  "rest-param-output"
-                );
-              </script>
-            </div>
+            <b>Input (ES6):</b>
+            <br>
+            <pre id="rest-param-input"
+                 class="fragment javascript big"><code>
+function max(a, ...rest) {
+  rest.forEach(x => { if (x > a) a = x; });
+  return a;
+}</code></pre>
+            <br>
+            <b>Output (ES5):</b>
+            <br>
+            <pre id="rest-param-output"
+                 class="fragment javascript big"><code>
+function max(a) {
+  var rest = Array.prototype.slice.call(arguments, 1);
+  rest.forEach(function(x) { if (x > a) a = x; }.bind(this));
+  return a;
+}</code></pre>
+            <!--<script>
+              document.getElementById("rest-param-output").innerText =
+              transforms.transformRestParameters(
+                  document.getElementById("rest-param-input").innerText);
+            </script>-->
           </section>
 
           <section data-transition="none">

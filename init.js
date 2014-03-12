@@ -56,5 +56,3 @@ Reveal.initialize({
         }
     }]
 });
-
-makeCodeMirror.init();

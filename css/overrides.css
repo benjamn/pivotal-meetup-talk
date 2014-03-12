@@ -11,6 +11,14 @@
   width: auto;
 }
 
+.reveal section#rest-param-traverse pre,
+.reveal section#arrow-fn-traverse pre {
+  display: block;
+  position: relative;
+  margin: 0;
+  left: 200px;
+}
+
 .reveal pre.big,
 .reveal pre.contact {
   font-size: 32px;

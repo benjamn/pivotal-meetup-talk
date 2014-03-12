@@ -226,7 +226,7 @@ var ast = recast.parse(
 );</code></pre>
         </section>
 
-        <section>
+        <section id="arrow-fn-traverse">
           <section data-transition="none">
             <h3>Next, traverse and modify the syntax tree:</h3>
             <br>
@@ -471,35 +471,35 @@ console.log(recast.print(ast).code);
           <img class="instagram" src="img/led_splatter.jpg" />
         </section>
 
-        <section>
-          <section data-transition="none">
-            <h2>Example: <code>...rest</code> parameters</h2>
-            <br>
-            <b>Input (ES6):</b>
-            <br>
-            <pre id="rest-param-input"
-                 class="fragment javascript big"><code>
+        <section data-transition="none">
+          <h2>Example: <code>...rest</code> parameters</h2>
+          <br>
+          <b>Input (ES6):</b>
+          <br>
+          <pre id="rest-param-input"
+               class="fragment javascript big"><code>
 function max(a, ...rest) {
   rest.forEach(x => { if (x > a) a = x; });
   return a;
 }</code></pre>
-            <br>
-            <b>Output (ES5):</b>
-            <br>
-            <pre id="rest-param-output"
-                 class="fragment javascript big"><code>
+          <br>
+          <b>Output (ES5):</b>
+          <br>
+          <pre id="rest-param-output"
+               class="fragment javascript big"><code>
 function max(a) {
   var rest = Array.prototype.slice.call(arguments, 1);
   rest.forEach(function(x) { if (x > a) a = x; }.bind(this));
   return a;
 }</code></pre>
-            <!--<script>
-              document.getElementById("rest-param-output").innerText =
+          <!--<script>
+            document.getElementById("rest-param-output").innerText =
               transforms.transformRestParameters(
-                  document.getElementById("rest-param-input").innerText);
-            </script>-->
-          </section>
+                document.getElementById("rest-param-input").innerText);
+          </script>-->
+        </section>
 
+        <section id="rest-param-traverse" data-transition="none">
           <section data-transition="none">
             <h2>Example: <code>...rest</code> parameters</h2>
             <br>
@@ -1205,7 +1205,10 @@ find ~/www/html/js/lib | \
      href="https://github.com/benjamn/recast">benjamn/recast</a>,
   <a target="_blank"
      href="https://github.com/facebook/regenerator">facebook/regenerator</a>
-}</pre>
+}
+
+<a target="_blank"
+   href="https://code.facebook.com/projects">code.facebook.com/projects</a></pre>
         </section>
       </div>
     </div>

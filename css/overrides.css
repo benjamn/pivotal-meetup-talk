@@ -6,30 +6,38 @@
 
 .reveal pre {
   box-shadow: none;
+}
+
+.reveal pre.contact {
+  font-size: 32px;
   display: inline-block;
   margin: 0 auto;
   width: auto;
 }
 
-.reveal section#rest-param-traverse pre,
-.reveal section#arrow-fn-traverse pre {
+body > .CodeMirror {
+  visibility: hidden;
+}
+
+.CodeMirror {
+  font-family: monospace !important;
+  line-height: 1.2em !important;
+}
+
+section#rest-param-traverse .CodeMirror,
+section#arrow-fn-traverse .CodeMirror {
   display: block;
   position: relative;
   margin: 0;
   left: 200px;
 }
 
-.reveal pre.big,
-.reveal pre.contact {
+.CodeMirror.big {
   font-size: 32px;
 }
 
-.reveal pre.center {
-  text-align: center;
-}
-
-.reveal pre code {
-  max-height: none;
+.CodeMirror.small {
+  font-size: 20px;
 }
 
 section.full_height,
@@ -76,7 +84,8 @@ img.instagram {
   z-index: -1;
 }
 
-.reveal section .CodeMirror {
+.CodeMirror {
+  background: none;
   height: auto;
   display: inline-block;
   margin: 20px auto;
@@ -86,10 +95,7 @@ img.instagram {
   font-family: monospace;
 }
 
-.reveal section .CodeMirror pre {
-  display: block;
-}
-
 .reveal section .CodeMirror-scroll {
-  padding-right: 1em;
+  padding: 1em;
+  margin: -1em;
 }

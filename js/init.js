@@ -1,3 +1,14 @@
+Array.prototype.forEach.call(
+  document.querySelectorAll("pre[data-language]"),
+  function(pre) {
+    makeCodeMirror(pre);
+  }
+);
+
+Reveal.addEventListener("ready", function() {
+  makeCodeMirror.init();
+});
+
 // Full list of configuration options available here:
 // https://github.com/hakimel/reveal.js#configuration
 Reveal.initialize({

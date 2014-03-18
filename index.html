@@ -16,12 +16,17 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <link rel="stylesheet" href="css/reveal.css">
-    <link rel="stylesheet" href="css/theme/default.css" id="theme">
-
+    <link rel="stylesheet" type="text/css" href="css/reveal.css">
+    <link rel="stylesheet" type="text/css" href="css/theme/default.css" id="theme">
+    <link rel="stylesheet" type="text/css" href="CodeMirror/lib/codemirror.css">
     <link rel="stylesheet" type="text/css" href="css/overrides.css">
 
     <script src="lib/js/head.min.js"></script>
+
+    <script src="CodeMirror/lib/codemirror.js"></script>
+    <script src="CodeMirror/mode/javascript/javascript.js"></script>
+    <script src="js/editor.js"></script>
+
     <script src="node_modules/transforms/bundle.js"></script>
   </head>
 
@@ -189,29 +194,33 @@
             <b>Input (ES6):</b>
             <br>
             <pre id="arrow-fn-input"
-                 class="fragment javascript big"><code>
-[3, 1, 10, 28].sort((a, b) => a - b)</code></pre>
+                 class="fragment big"
+                 data-language="javascript">
+[3, 1, 10, 28].sort((a, b) => a - b)
+            </pre>
             <br>
             <br>
             <b>Output (ES5):</b>
             <br>
             <pre id="arrow-fn-output"
-                 class="fragment javascript big"><code>
-[3, 1, 10, 28].sort(function(a, b) {
-  return a - b;
-}.bind(this))</code></pre>
-            <!--<script>
-              document.getElementById("arrow-fn-output").innerText =
-                transforms.transformArrowFunctions(
-                  document.getElementById("arrow-fn-input").innerText);
-            </script>-->
+                 class="fragment big"
+                 data-language="javascript">
+            </pre>
+            <script>
+              makeCodeMirror(
+                "arrow-fn-input",
+                "arrow-fn-output",
+                transforms.transformArrowFunctions
+              );
+            </script>
           </div>
         </section>
 
         <section>
           <h3>First, import some utilities and parse the code:</h3>
           <br>
-          <pre class="fragment javascript big"><code>
+          <pre class="fragment big"
+               data-language="javascript">
 var recast = require("recast");
 var types = recast.types;
 var traverse = types.traverse;
@@ -220,14 +229,14 @@ var b = types.builders;
 
 var ast = recast.parse(
   "[3, 1, 10, 28].sort((a, b) => a - b)"
-);</code></pre>
+);</pre>
         </section>
 
         <section id="arrow-fn-traverse">
           <section data-transition="none">
             <h3>Next, traverse and modify the syntax tree:</h3>
             <br>
-            <pre class="javascript small"><code>
+            <pre class="small" data-language="javascript">
 traverse(ast, function(node) {
 
 
@@ -250,13 +259,13 @@ traverse(ast, function(node) {
 
 
 });
-            </code></pre>
+            </pre>
           </section>
 
           <section data-transition="none">
             <h3>Next, traverse and modify the syntax tree:</h3>
             <br>
-            <pre class="javascript small"><code>
+            <pre class="small" data-language="javascript">
 traverse(ast, function(node) {
   if (n.ArrowFunctionExpression.check(node)) {
 
@@ -279,12 +288,12 @@ traverse(ast, function(node) {
 
   }
 });
-            </code></pre>
+            </pre>
           </section>
           <section data-transition="none">
             <h3>Next, traverse and modify the syntax tree:</h3>
             <br>
-            <pre class="javascript small"><code>
+            <pre class="small" data-language="javascript">
 traverse(ast, function(node) {
   if (n.ArrowFunctionExpression.check(node)) {
     var body = node.body;
@@ -307,13 +316,13 @@ traverse(ast, function(node) {
 
   }
 });
-            </code></pre>
+            </pre>
           </section>
 
           <section data-transition="none">
             <h3>Next, traverse and modify the syntax tree:</h3>
             <br>
-            <pre class="javascript small"><code>
+            <pre class="small" data-language="javascript">
 traverse(ast, function(node) {
   if (n.ArrowFunctionExpression.check(node)) {
     var body = node.body;
@@ -336,13 +345,13 @@ traverse(ast, function(node) {
 
   }
 });
-            </code></pre>
+            </pre>
           </section>
 
           <section data-transition="none">
             <h3>Next, traverse and modify the syntax tree:</h3>
             <br>
-            <pre class="javascript small"><code>
+            <pre class="small" data-language="javascript">
 traverse(ast, function(node) {
   if (n.ArrowFunctionExpression.check(node)) {
     var body = node.body;
@@ -365,13 +374,13 @@ traverse(ast, function(node) {
 
   }
 });
-            </code></pre>
+            </pre>
           </section>
 
           <section data-transition="none">
             <h3>Next, traverse and modify the syntax tree:</h3>
             <br>
-            <pre class="javascript small"><code>
+            <pre class="small" data-language="javascript">
 traverse(ast, function(node) {
   if (n.ArrowFunctionExpression.check(node)) {
     var body = node.body;
@@ -394,21 +403,21 @@ traverse(ast, function(node) {
     this.replace(bindExp);
   }
 });
-            </code></pre>
+            </pre>
           </section>
         </section>
 
         <section>
           <h3>Finally, reprint the code:</h3>
           <br>
-          <pre class="javascript big fragment"><code>
+          <pre class="big fragment" data-language="javascript">
 console.log(recast.print(ast).code);
 
 // Which prints:
 [3, 1, 10, 28].sort(function(a, b) {
   return a - b;
 }.bind(this))
-          </code></pre>
+          </pre>
           <br>
           <br>
           <p class="fragment">
@@ -442,12 +451,12 @@ console.log(recast.print(ast).code);
         <section>
           <h2>Recast recap:</h2>
           <br>
-          <pre class="fragment javascript big"><code>
+          <pre class="fragment big" data-language="javascript">
 var recast = require("recast");
 var ast = recast.parse(source);
 transform(ast); // Anything goes.
 console.log(recast.print(ast).code);
-          </code></pre>
+          </pre>
         </section>
 
         <section>
@@ -474,33 +483,33 @@ console.log(recast.print(ast).code);
           <b>Input (ES6):</b>
           <br>
           <pre id="rest-param-input"
-               class="fragment javascript big"><code>
+               class="fragment big"
+               data-language="javascript">
 function max(a, ...rest) {
   rest.forEach(x => { if (x > a) a = x; });
   return a;
-}</code></pre>
+}</pre>
           <br>
           <b>Output (ES5):</b>
           <br>
           <pre id="rest-param-output"
-               class="fragment javascript big"><code>
-function max(a) {
-  var rest = Array.prototype.slice.call(arguments, 1);
-  rest.forEach(function(x) { if (x > a) a = x; }.bind(this));
-  return a;
-}</code></pre>
-          <!--<script>
-            document.getElementById("rest-param-output").innerText =
-              transforms.transformRestParameters(
-                document.getElementById("rest-param-input").innerText);
-          </script>-->
+               class="fragment big"
+               data-language="javascript">
+          </pre>
+          <script>
+            makeCodeMirror(
+              "rest-param-input",
+              "rest-param-output",
+              transforms.transformRestParameters
+            );
+          </script>
         </section>
 
         <section id="rest-param-traverse" data-transition="none">
           <section data-transition="none">
             <h2>Example: <code>...rest</code> parameters</h2>
             <br>
-            <pre class="javascript small"><code>
+            <pre class="small" data-language="javascript">
 traverse(ast, function(node) {
 
 
@@ -519,13 +528,13 @@ traverse(ast, function(node) {
 
 
 
-});</code></pre>
+});</pre>
           </section>
 
           <section data-transition="none">
             <h2>Example: <code>...rest</code> parameters</h2>
             <br>
-            <pre class="javascript small"><code>
+            <pre class="small" data-language="javascript">
 traverse(ast, function(node) {
   if (n.Function.check(node) && node.rest) {
 
@@ -544,13 +553,13 @@ traverse(ast, function(node) {
 
 
   }
-});</code></pre>
+});</pre>
           </section>
 
           <section data-transition="none">
             <h2>Example: <code>...rest</code> parameters</h2>
             <br>
-            <pre class="javascript small"><code>
+            <pre class="small" data-language="javascript">
 traverse(ast, function(node) {
   if (n.Function.check(node) && node.rest) {
     var sliceCallee = mx(mx(mx("Array", "prototype"), "slice"), "call");
@@ -569,13 +578,13 @@ traverse(ast, function(node) {
 
 
   }
-});</code></pre>
+});</pre>
           </section>
 
           <section data-transition="none">
             <h2>Example: <code>...rest</code> parameters</h2>
             <br>
-            <pre class="javascript small"><code>
+            <pre class="small" data-language="javascript">
 traverse(ast, function(node) {
   if (n.Function.check(node) && node.rest) {
     var sliceCallee = mx(mx(mx("Array", "prototype"), "slice"), "call");
@@ -594,13 +603,13 @@ traverse(ast, function(node) {
 
 
   }
-});</code></pre>
+});</pre>
           </section>
 
           <section data-transition="none">
             <h2>Example: <code>...rest</code> parameters</h2>
             <br>
-            <pre class="javascript small"><code>
+            <pre class="small" data-language="javascript">
 traverse(ast, function(node) {
   if (n.Function.check(node) && node.rest) {
     var sliceCallee = mx(mx(mx("Array", "prototype"), "slice"), "call");
@@ -619,13 +628,13 @@ traverse(ast, function(node) {
 
 
   }
-});</code></pre>
+});</pre>
           </section>
 
           <section data-transition="none">
             <h2>Example: <code>...rest</code> parameters</h2>
             <br>
-            <pre class="javascript small"><code>
+            <pre class="small" data-language="javascript">
 traverse(ast, function(node) {
   if (n.Function.check(node) && node.rest) {
     var sliceCallee = mx(mx(mx("Array", "prototype"), "slice"), "call");
@@ -644,13 +653,13 @@ traverse(ast, function(node) {
 
 
   }
-});</code></pre>
+});</pre>
           </section>
 
           <section data-transition="none">
             <h2>Example: <code>...rest</code> parameters</h2>
             <br>
-            <pre class="javascript small"><code>
+            <pre class="small" data-language="javascript">
 traverse(ast, function(node) {
   if (n.Function.check(node) && node.rest) {
     var sliceCallee = mx(mx(mx("Array", "prototype"), "slice"), "call");
@@ -669,13 +678,13 @@ traverse(ast, function(node) {
     node.body.body.unshift(restVarDecl);
 
   }
-});</code></pre>
+});</pre>
           </section>
 
           <section data-transition="none">
             <h2>Example: <code>...rest</code> parameters</h2>
             <br>
-            <pre class="javascript small"><code>
+            <pre class="small" data-language="javascript">
 traverse(ast, function(node) {
   if (n.Function.check(node) && node.rest) {
     var sliceCallee = mx(mx(mx("Array", "prototype"), "slice"), "call");
@@ -694,7 +703,7 @@ traverse(ast, function(node) {
     node.body.body.unshift(restVarDecl);
     node.rest = null;
   }
-});</code></pre>
+});</pre>
           </section>
         </section>
 
@@ -708,7 +717,8 @@ traverse(ast, function(node) {
                 <td>
                   <b>Input (ES6):</b>
                   <br>
-                  <pre class="javascript small fragment"><code>
+                  <pre class="small fragment"
+                       data-language="javascript">
 class Derived extends Base {
   constructor(value) {
     super(value + 1);
@@ -726,7 +736,8 @@ class Derived extends Base {
                 <td>
                   <b>Output (ES5):</b>
                   <br>
-                  <pre class="javascript small fragment"><code>
+                  <pre class="small fragment"
+                       data-language="javascript">
 function Derived(value) {
   Base.call(this, value + 1);
 }
@@ -761,7 +772,8 @@ Derived.getName = function() {
         <section>
           <h2>What our classes used to look like:</h2>
           <br>
-          <pre class="javascript small fragment"><code>
+          <pre class="small fragment"
+               data-language="javascript">
 var Class = require('Class');
 var copyProperties = require('copyProperties');
 
@@ -846,7 +858,8 @@ Class.extend(Derived, Base);</pre></code>
                   We have lots of this (ES5):
                   <br>
                   <br>
-                  <pre class="javascript small fragment"><code>
+                  <pre class="small fragment"
+                       data-language="javascript">
 var Class = require('Class');
 var copyProperties = require('copyProperties');
 
@@ -872,7 +885,8 @@ Class.extend(Derived, Base);</pre></code>
                   We want more of this (ES6):
                   <br>
                   <br>
-                  <pre class="javascript small fragment"><code>
+                  <pre class="small fragment"
+                       data-language="javascript">
 class Derived extends Base {
   constructor(value) {
     super(value + 1);
@@ -902,7 +916,7 @@ class Derived extends Base {
                   We want more of this (ES6):
                   <br>
                   <br>
-                  <pre class="javascript small"><code>
+                  <pre class="small" data-language="javascript">
 class Derived extends Base {
   constructor(value) {
     super(value + 1);
@@ -921,7 +935,8 @@ class Derived extends Base {
                   So that we can ship this (ES5):
                   <br>
                   <br>
-                  <pre class="javascript small fragment"><code>
+                  <pre class="small fragment"
+                       data-language="javascript">
 function Derived(value) {
   Base.call(this, value + 1);
 }
@@ -1078,13 +1093,15 @@ Derived.getName = function() {
             to run the transform script in many processes simultaneously.
           </li></ol></h2>
           <br>
-          <pre class="shell fragment big"><code>
+          <!-- TODO Syntax highlight this!! -->
+          <pre class="fragment big"
+               data-language="shell">
 find ~/www/html/js/lib | \
   grep "\.js$" | \
   time parallel ~/www/scripts/bin/classify --update
 
 228.03s user 12.25s system 1229% cpu 19.548 total
-          </code></pre>
+          </pre>
           <aside class="notes">
             <p>
               Look at that CPU percentage!

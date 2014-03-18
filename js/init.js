@@ -29,20 +29,6 @@ Reveal.initialize({
             return !!document.querySelector( '[data-markdown]' );
         }
     }, {
-        src: 'plugin/highlight/highlight.js',
-        async: true,
-        callback: function() {
-            Array.prototype.map.call(
-                document.querySelectorAll("pre code"),
-                function(code) {
-                    if (code.getAttribute("data-notrim") !== "true") {
-                        code.textContent = code.textContent.replace(/^\s+|\s+$/g, "");
-                    }
-                    hljs.highlightBlock(code.parentNode);
-                }
-            );
-        }
-    }, {
         src: 'plugin/zoom-js/zoom.js',
         async: true,
         condition: function() {

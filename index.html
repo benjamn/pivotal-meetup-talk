@@ -24,6 +24,7 @@
 
     <script src="CodeMirror/lib/codemirror.js"></script>
     <script src="CodeMirror/mode/javascript/javascript.js"></script>
+    <script src="CodeMirror/mode/xml/xml.js"></script>
     <script src="CodeMirror/mode/shell/shell.js"></script>
     <script src="js/editor.js"></script>
 
@@ -1213,6 +1214,53 @@ find ~/www/html/js/lib | \
             The best way to get rid of old idioms is to get rid of them
             yourself.
           </aside>
+        </section>
+
+        <section>
+          <img class="instagram" src="img/phi_phi_snake.jpg"/>
+          <aside class="notes">
+            Now I'd like to talk about a feature we've added to our
+            dialect of JavaScript at Facebook that is definitely *not*
+            slated for inclusion in ECMAScript 6.
+          </aside>
+        </section>
+
+        <section data-transition="none">
+          <h2>Non-ES6 example: JSX</h2>
+          <br>
+          <b>Input (ES6++):</b>
+          <br>
+          <pre id="jsx-input"
+               class="fragment small"
+               data-language="xml">
+          </pre>
+          <script>
+            // Hack to avoid interpreting the JSX as HTML.
+            document.getElementById("jsx-input").textContent = [
+              "<div>",
+              "  <h3>TODO</h3>",
+              "  <TodoList items={this.state.items}/>",
+              "  <form onSubmit={this.handleSubmit}>",
+              "    <input onChange={this.handleChange} value={this.state.text}/>",
+              "    <button>{'Add #' + (this.state.items.length + 1)}</button>",
+              "  </form>",
+              "</div>"
+            ].join("\n");
+          </script>
+          <br>
+          <b>Output (ES5):</b>
+          <br>
+          <pre id="jsx-output"
+               class="fragment small"
+               data-language="javascript">
+          </pre>
+          <script>
+            makeCodeMirror(
+              "jsx-input",
+              "jsx-output",
+              transforms.transformJSX
+            );
+          </script>
         </section>
 
         <section data-transition="zoom">

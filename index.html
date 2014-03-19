@@ -193,6 +193,7 @@
           <div>
             <b>Input (ES6):</b>
             <br>
+            <br>
             <pre id="arrow-fn-input"
                  class="fragment big"
                  data-language="javascript">
@@ -201,6 +202,7 @@
             <br>
             <br>
             <b>Output (ES5):</b>
+            <br>
             <br>
             <pre id="arrow-fn-output"
                  class="fragment big"
@@ -718,6 +720,7 @@ traverse(ast, function(node) {
                 <td>
                   <b>Input (ES6):</b>
                   <br>
+                  <br>
                   <pre class="small fragment"
                        data-language="javascript">
 class Derived extends Base {
@@ -736,6 +739,7 @@ class Derived extends Base {
                 </td>
                 <td>
                   <b>Output (ES5):</b>
+                  <br>
                   <br>
                   <pre class="small fragment"
                        data-language="javascript">
@@ -758,7 +762,6 @@ Derived.getName = function() {
               </tr>
             </tbody>
           </table>
-          <br>
           <p class="fragment">
             Transform code much more involved than previous examples;<br>
             see <a target="_blank" href="https://github.com/facebook/jstransform/blob/master/visitors/es6-class-visitors.js">es6-class-visitors.js</a>

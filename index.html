@@ -1367,6 +1367,397 @@ find ~/www/html/js/lib | \
                src="img/yield_ahead_1000px.png" />
         </section>
 
+        <section class="two-up">
+          <h2>What about something trickier?</h2>
+          <br>
+          <div class="fragment">
+            <pre class="small left"
+                 data-language="javascript">
+function *fibonacci(limit) {
+  var a = 0;
+  var b = 1;
+
+  limit = limit || Infinity;
+
+  while (a <= limit) {
+    yield a;
+
+    var next = a + b;
+    a = b;
+    b = next;
+  }
+}
+            </pre>
+            <pre class="small right"
+                 data-language="javascript">
+var g = fibonacci(10);
+
+console.log(g.next().value); // 0
+console.log(g.next().value); // 1
+console.log(g.next().value); // 1
+console.log(g.next().value); // 2
+console.log(g.next().value); // 3
+console.log(g.next().value); // 5
+console.log(g.next().value); // 8
+console.log(g.next().done); // true
+            </pre>
+          </div>
+          <div style="clear: both; height: 25px"></div>
+          <div class="fragment">
+            How hard could it be to translate this function into one that
+            no longer contains <code>function*</code>
+            or <code>yield</code>?
+          </div>
+        </section>
+
+        <section class="tweet">
+          <blockquote class="twitter-tweet" lang="en">
+            <p>
+              I&#39;ve been jokingly referring to this side project as &quot;my life&#39;s
+              work&quot; for so long that I&#39;m terrified it might
+              actually be finished soon.
+            </p>&mdash; Ben Newman (@benjamn)
+            <a href="https://twitter.com/benjamn/statuses/331923303767867392">
+              May 8, 2013</a>
+          </blockquote>
+        </section>
+
+        <section>
+          <h2>It's the trickiest code I've ever written.</h2>
+        </section>
+
+        <section id="generator-codegen">
+          <section data-transition="none">
+            <pre class="small" data-language="javascript">
+function *fibonacci(limit) {
+  var a = 0;
+  var b = 1;
+
+  limit = limit || Infinity;
+
+  while (a <= limit) {
+    yield a;
+
+    var next = a + b;
+    a = b;
+    b = next;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+            </pre>
+          </section>
+
+          <section data-transition="none">
+            <pre class="small" data-language="javascript">
+function *fibonacci(limit) {
+  var a, b, next;
+
+  a = 0;
+  b = 1;
+
+  limit = limit || Infinity;
+
+  while (a <= limit) {
+    yield a;
+
+    next = a + b;
+    a = b;
+    b = next;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+}
+            </pre>
+          </section>
+
+          <section data-transition="none">
+            <pre class="small" data-language="javascript">
+function fibonacci(limit) {
+  var a, b, next;
+
+  return function*() {
+    a = 0;
+    b = 1;
+
+    limit = limit || Infinity;
+
+    while (a <= limit) {
+      yield a;
+
+      next = a + b;
+      a = b;
+      b = next;
+    }
+  };
+
+
+
+
+
+
+
+
+
+
+}
+            </pre>
+          </section>
+
+          <section data-transition="none">
+            <pre class="small" data-language="javascript">
+function fibonacci(limit) {
+  var a, b, next;
+
+  return function(context) {
+    while (1) switch (context.prev = context.next) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+  };
+}
+            </pre>
+          </section>
+
+          <section data-transition="none">
+            <pre class="small" data-language="javascript">
+function fibonacci(limit) {
+  var a, b, next;
+
+  return function(context) {
+    while (1) switch (context.prev = context.next) {
+    case 0:
+      a = 0;
+      b = 1;
+      limit = limit || Infinity;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+  };
+}
+            </pre>
+          </section>
+
+          <section data-transition="none">
+            <pre class="small" data-language="javascript">
+function fibonacci(limit) {
+  var a, b, next;
+
+  return function(context) {
+    while (1) switch (context.prev = context.next) {
+    case 0:
+      a = 0;
+      b = 1;
+      limit = limit || Infinity;
+    case 3:
+      if (!(a <= limit)) {
+        context.next = 11;
+        break;
+      }
+
+
+
+
+
+
+
+
+
+
+
+    }
+  };
+}
+            </pre>
+          </section>
+
+          <section data-transition="none">
+            <pre class="small" data-language="javascript">
+function fibonacci(limit) {
+  var a, b, next;
+
+  return function(context) {
+    while (1) switch (context.prev = context.next) {
+    case 0:
+      a = 0;
+      b = 1;
+      limit = limit || Infinity;
+    case 3:
+      if (!(a <= limit)) {
+        context.next = 11;
+        break;
+      }
+
+
+
+
+
+
+
+
+    case 11:
+    case "end":
+      return context.stop();
+    }
+  };
+}
+            </pre>
+          </section>
+
+          <section data-transition="none">
+            <pre class="small" data-language="javascript">
+function fibonacci(limit) {
+  var a, b, next;
+
+  return function(context) {
+    while (1) switch (context.prev = context.next) {
+    case 0:
+      a = 0;
+      b = 1;
+      limit = limit || Infinity;
+    case 3:
+      if (!(a <= limit)) {
+        context.next = 11;
+        break;
+      }
+      context.next = 6;
+      return a;
+
+
+
+
+
+
+    case 11:
+    case "end":
+      return context.stop();
+    }
+  };
+}
+            </pre>
+          </section>
+
+          <section data-transition="none">
+            <pre class="small" data-language="javascript">
+function fibonacci(limit) {
+  var a, b, next;
+
+  return function(context) {
+    while (1) switch (context.prev = context.next) {
+    case 0:
+      a = 0;
+      b = 1;
+      limit = limit || Infinity;
+    case 3:
+      if (!(a <= limit)) {
+        context.next = 11;
+        break;
+      }
+      context.next = 6;
+      return a;
+    case 6:
+      next = a + b;
+      a = b;
+      b = next;
+      context.next = 3;
+      break;
+    case 11:
+    case "end":
+      return context.stop();
+    }
+  };
+}
+            </pre>
+          </section>
+
+          <section data-transition="none">
+            <pre class="small" data-language="javascript">
+function fibonacci(limit) {
+  var a, b, next;
+
+  return wrapGenerator(function fibonacci$(context) {
+    while (1) switch (context.prev = context.next) {
+    case 0:
+      a = 0;
+      b = 1;
+      limit = limit || Infinity;
+    case 3:
+      if (!(a <= limit)) {
+        context.next = 11;
+        break;
+      }
+      context.next = 6;
+      return a;
+    case 6:
+      next = a + b;
+      a = b;
+      b = next;
+      context.next = 3;
+      break;
+    case 11:
+    case "end":
+      return context.stop();
+    }
+  }, this);
+}
+            </pre>
+          </section>
+        </section>
+
         <section data-transition="zoom">
           <div class="thanks">
             <h2>Thanks!</h2>
@@ -1398,6 +1789,8 @@ find ~/www/html/js/lib | \
 
     <script src="js/reveal.js"></script>
     <script src="js/init.js"></script>
+    <script src="//platform.twitter.com/widgets.js"
+            charset="utf-8" async></script>
 
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

@@ -32,7 +32,8 @@ body > .CodeMirror {
 }
 
 section#rest-param-traverse .CodeMirror,
-section#arrow-fn-traverse .CodeMirror {
+section#arrow-fn-traverse .CodeMirror,
+section#generator-codegen .CodeMirror {
   display: block;
   position: relative;
   margin: 0;
@@ -63,12 +64,13 @@ section.external_iframe {
   margin: 50px 0 0 0;
 }
 
-section table {
+.reveal section table {
   width: 100%;
 }
 
-section table.top td {
+.reveal section table.top td {
   vertical-align: text-top;
+  text-align: center;
 }
 
 img.interstitial {
@@ -106,4 +108,22 @@ img.interstitial {
 .reveal section .CodeMirror-scroll {
   padding: 1em;
   margin: -1em;
+}
+
+.reveal section.tweet {
+  text-align: center;
+}
+
+.reveal section.tweet iframe {
+  margin: 10px auto !important;
+}
+
+.reveal section.two-up .left {
+  float: left;
+  padding-left: 120px;
+}
+
+.reveal section.two-up .right {
+  float: right;
+  padding-right: 100px;
 }

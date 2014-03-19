@@ -1264,6 +1264,38 @@ find ~/www/html/js/lib | \
         </section>
 
         <section>
+          <h2>Why fork the language?</h2>
+          <br>
+          <ul>
+            <li class="fragment">
+              People keep writing HTML-like templating languages, so there
+              must be some value in that.
+            </li>
+            <li class="fragment">
+              JSX affords a useful layer of
+              indirection<span class="fragment">, allowing us to change
+              our minds about whether to require <code>new</code> keywords
+              or not, how to handle children, what to do about
+              whitespace, <code>React.DOM</code> namespacing, &amp;c.</span>
+            </li>
+            <li class="fragment">
+              Huge benefits from adding similar syntax to PHP at Facebook,
+              and we believe the similarity is worthwhile.
+            </li>
+            <li class="fragment">
+              Arguably much less aggressive than something like
+              CoffeeScript<span class="fragment">, or even most other
+              templating languages.</span>
+            </li>
+            <li class="fragment">
+              We're content with JSX never becoming part of the ECMAScript
+              standard. <span class="fragment">That was never the
+              point.</span>
+            </li>
+          </ul>
+        </section>
+
+        <section>
           <section data-transition="none">
             <h2>Can we express JSX in &ldquo;real&rdquo; ES6?</h2>
             <br>

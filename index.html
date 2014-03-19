@@ -1532,7 +1532,7 @@ function fibonacci(limit) {
   var a, b, next;
 
   return function(context) {
-    while (1) switch (context.prev = context.next) {
+    while (1) switch (context.next) {
 
 
 
@@ -1565,7 +1565,7 @@ function fibonacci(limit) {
   var a, b, next;
 
   return function(context) {
-    while (1) switch (context.prev = context.next) {
+    while (1) switch (context.next) {
     case 0:
       a = 0;
       b = 1;
@@ -1598,7 +1598,7 @@ function fibonacci(limit) {
   var a, b, next;
 
   return function(context) {
-    while (1) switch (context.prev = context.next) {
+    while (1) switch (context.next) {
     case 0:
       a = 0;
       b = 1;
@@ -1631,7 +1631,7 @@ function fibonacci(limit) {
   var a, b, next;
 
   return function(context) {
-    while (1) switch (context.prev = context.next) {
+    while (1) switch (context.next) {
     case 0:
       a = 0;
       b = 1;
@@ -1664,7 +1664,7 @@ function fibonacci(limit) {
   var a, b, next;
 
   return function(context) {
-    while (1) switch (context.prev = context.next) {
+    while (1) switch (context.next) {
     case 0:
       a = 0;
       b = 1;
@@ -1697,7 +1697,40 @@ function fibonacci(limit) {
   var a, b, next;
 
   return function(context) {
-    while (1) switch (context.prev = context.next) {
+    while (1) switch (context.next) {
+    case 0:
+      a = 0;
+      b = 1;
+      limit = limit || Infinity;
+    case 3:
+      if (!(a <= limit)) {
+        context.next = 11;
+        break;
+      }
+      context.next = 6;
+      return a;
+    case 6:
+      next = a + b;
+      a = b;
+      b = next;
+
+
+    case 11:
+    case "end":
+      return context.stop();
+    }
+  };
+}
+            </pre>
+          </section>
+
+          <section data-transition="none">
+            <pre class="small" data-language="javascript">
+function fibonacci(limit) {
+  var a, b, next;
+
+  return function(context) {
+    while (1) switch (context.next) {
     case 0:
       a = 0;
       b = 1;
@@ -1729,8 +1762,8 @@ function fibonacci(limit) {
 function fibonacci(limit) {
   var a, b, next;
 
-  return wrapGenerator(function fibonacci$(context) {
-    while (1) switch (context.prev = context.next) {
+  return wrapGenerator(function(context) {
+    while (1) switch (context.next) {
     case 0:
       a = 0;
       b = 1;

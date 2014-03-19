@@ -1,3 +1,7 @@
+.hidden {
+  visibility: hidden;
+}
+
 .branding {
   position: fixed;
   left: 25px;

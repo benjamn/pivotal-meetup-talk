@@ -1299,32 +1299,32 @@ find ~/www/html/js/lib | \
           <section data-transition="none">
             <h2>Can we express JSX in &ldquo;real&rdquo; ES6?</h2>
             <br>
-            <pre id="non-template-jsx"
-                 class="fragment big"
-                 data-language="xml">
-            </pre>
-            <script>
-              // Hack to avoid interpreting the JSX as HTML.
-              document.getElementById("non-template-jsx").textContent = [
-                "<div>",
-                "  <h3>TODO</h3>",
-                "  <TodoList items={this.state.items}/>",
-                "  <form onSubmit={this.handleSubmit}>",
-                "    <input value={this.state.text}/>",
-                "    <button>{",
-                "      'Add #' + (this.state.items.length + 1)",
-                "    }</button>",
-                "  </form>",
-                "</div>"
-              ].join("\n");
-            </script>
-            <br>
-            <h3 class="hidden">
-              <!-- Copied here just to ensure same slide height. -->
-              This new kind of string is made possible by
-              <a href="http://wiki.ecmascript.org/doku.php?id=harmony:quasis"
-                 target="_blank">template literal syntax</a>.
-            </h3>
+            <div class="fragment">
+              <pre id="non-template-jsx"
+                   class="big"
+                   data-language="xml">
+              </pre>
+              <script>
+                // Hack to avoid interpreting the JSX as HTML.
+                document.getElementById("non-template-jsx").textContent = [
+                  "<div>",
+                  "  <h3>TODO</h3>",
+                  "  <TodoList items={this.state.items}/>",
+                  "  <form onSubmit={this.handleSubmit}>",
+                  "    <input value={this.state.text}/>",
+                  "    <button>{",
+                  "      'Add #' + (this.state.items.length + 1)",
+                  "    }</button>",
+                  "  </form>",
+                  "</div>"
+                ].join("\n");
+              </script>
+              <br>
+              <h3>
+                press the<br>
+                down arrow!
+              </h3>
+            </div>
           </section>
 
           <section data-transition="none">

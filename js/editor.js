@@ -45,6 +45,7 @@ function makeCodeMirror(sourceNodeOrId, /*optional:*/ targetNodeOrId, transform)
     delayedReplace(target, targetNode);
   }, {
     value: transform(origValue),
+    mode: targetNode.getAttribute("data-language") || "javascript",
     readOnly: true
   });
 

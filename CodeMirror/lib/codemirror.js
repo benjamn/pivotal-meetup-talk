@@ -3063,7 +3063,7 @@ window.CodeMirror = (function() {
       else if (line > last) { line = last; end = true; }
       var lineObj = getLine(this.doc, line);
       return intoCoordSystem(this, getLine(this.doc, line), {top: 0, left: 0}, mode || "page").top +
-        (end ? lineObj.height : 0);
+        (end ? this.doc.height - heightAtLine(this, lineObj) : 0);
     },
 
     defaultTextHeight: function() { return textHeight(this.display); },
@@ -3904,7 +3904,7 @@ window.CodeMirror = (function() {
       this.doc.cantEdit = false;
       if (cm) reCheckSelection(cm);
     }
-    signalLater(cm, "markerCleared", cm, this);
+    if (cm) signalLater(cm, "markerCleared", cm, this);
     if (withOp) endOperation(cm);
   };
 
@@ -4013,8 +4013,8 @@ window.CodeMirror = (function() {
       if (marker.className || marker.title || marker.startStyle || marker.endStyle || marker.collapsed)
         regChange(cm, from.line, to.line + 1);
       if (marker.atomic) reCheckSelection(cm);
+      signalLater(cm, "markerAdded", cm, marker);
     }
-    signalLater(cm, "markerAdded", cm, marker);
     return marker;
   }
 

@@ -78,9 +78,10 @@ img.interstitial {
 }
 
 .reveal section img#yield_ahead,
+.reveal section img#wires,
 .reveal section .thanks {
   position: relative;
-  top: -30px;
+  top: -25px;
 }
 
 .reveal section .thanks h2 {

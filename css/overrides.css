@@ -127,3 +127,15 @@ img.interstitial {
   float: right;
   padding-right: 100px;
 }
+
+.reveal section.two-up .objMap-left {
+  position: relative;
+  float: left;
+  left: 100px;
+}
+
+.reveal section.two-up .objMap-right {
+  position: relative;
+  float: left;
+  left: 150px;
+}

@@ -34,6 +34,8 @@ function makeCodeMirror(sourceNodeOrId, /*optional:*/ targetNodeOrId, transform)
     readOnly: !targetNode
   });
 
+  sourceNode.removeAttribute("data-language");
+
   if (!targetNode) {
     return source;
   }
@@ -48,6 +50,8 @@ function makeCodeMirror(sourceNodeOrId, /*optional:*/ targetNodeOrId, transform)
     mode: targetNode.getAttribute("data-language") || "javascript",
     readOnly: true
   });
+
+  sourceNode.removeAttribute("data-language");
 
   var delayTimer;
   var delayMS = 50;

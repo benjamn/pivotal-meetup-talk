@@ -8,8 +8,11 @@
   bottom: 25px;
 }
 
+.reveal section img#yield_ahead,
 .reveal pre {
   box-shadow: none;
+  border: none;
+  outline: none;
 }
 
 .reveal pre.contact {
@@ -68,10 +71,11 @@ section table.top td {
   vertical-align: text-top;
 }
 
-img.instagram {
+img.interstitial {
   zoom: 1 !important;
 }
 
+.reveal section img#yield_ahead,
 .reveal section .thanks {
   position: relative;
   top: -30px;
